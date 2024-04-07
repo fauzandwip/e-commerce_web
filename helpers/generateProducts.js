@@ -1,9 +1,9 @@
-const axios = require("axios");
-const { writeFile } = require("node:fs/promises");
+const axios = require('axios');
+const { writeFile } = require('node:fs/promises');
 
 const getProducts = async () => {
   try {
-    const { data } = await axios.get("https://dummyjson.com/products");
+    const { data } = await axios.get('https://dummyjson.com/products');
     return data;
   } catch (error) {
     console.log(error);
@@ -29,7 +29,7 @@ const writeProducts = async () => {
     });
 
     await writeFile(
-      __dirname + "/../data_dummy/products.json",
+      __dirname + '/../data_dummy/products.json',
       JSON.stringify(mappedProducts, null, 2),
     );
   } catch (error) {

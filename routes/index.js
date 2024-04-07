@@ -1,5 +1,5 @@
-const router = require("express").Router();
+const router = require('express').Router();
 
-router.get("/posts", (req, res) => res.json({ body: [{ title: "Post" }] }));
+router.get('/posts', (req, res) => res.json({ body: [{ title: 'Post' }] }));
 
 module.exports = router;
