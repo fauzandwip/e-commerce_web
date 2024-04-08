@@ -1,5 +1,5 @@
 const { raw } = require('express');
-const { comparePassword } = require('../helpers/bcrypt');
+const { comparePassword, hashPassword } = require('../helpers/bcrypt');
 const { signToken } = require('../helpers/jwt');
 const { User, Profile } = require('../models');
 
@@ -61,6 +61,32 @@ class UserController {
           access_token,
           email: user.email,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async resetPassword(req, res, next) {
+    try {
+      const { email } = req.user;
+      const { oldPassword, newPassword } = req.body;
+
+      const user = await User.findOne({ where: { email } });
+      if (!comparePassword(oldPassword, user.password)) {
+        throw {
+          name: 'Unauthenticated',
+          message: 'Invalid password',
+        };
+      }
+
+      await user.update({
+        password: newPassword,
+      });
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Successfully reset the password',
       });
     } catch (error) {
       next(error);

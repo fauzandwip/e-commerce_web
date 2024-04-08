@@ -26,8 +26,8 @@ module.exports = (sequelize, DataTypes) => {
           notNull: { msg: 'Password is required' },
           notEmpty: { msg: 'Password is required' },
           len: {
-            args: [5, 15],
-            msg: 'Password must be between 5 to 15 characters',
+            args: [5],
+            msg: 'Password must be less than or equal to 5 characters',
           },
         },
       },
@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.beforeCreate((instance) => {
+    instance.password = hashPassword(instance.password);
+  });
+
+  User.beforeUpdate((instance) => {
     instance.password = hashPassword(instance.password);
   });
   return User;
