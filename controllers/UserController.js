@@ -1,7 +1,7 @@
 const { raw } = require('express');
 const { comparePassword } = require('../helpers/bcrypt');
 const { signToken } = require('../helpers/jwt');
-const { User } = require('../models');
+const { User, Profile } = require('../models');
 
 class UserController {
   static async register(req, res, next) {
@@ -61,6 +61,65 @@ class UserController {
           access_token,
           email: user.email,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async createProfile(req, res, next) {
+    try {
+      const { id } = req.user;
+      const { firstName, lastName, address } = req.body;
+      const profile = await Profile.findOne({ where: { user_id: id } });
+
+      if (profile) {
+        throw {
+          name: 'BadRequest',
+          message: 'User has created the profile ',
+        };
+      }
+
+      const newProfile = await Profile.create({
+        user_id: id,
+        firstName,
+        lastName,
+        address,
+      });
+
+      res.status(201).json({
+        status: 'success',
+        message: 'Successfully created the profile',
+        body: newProfile,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async updateProfile(req, res, next) {
+    try {
+      const { id } = req.user;
+      const { firstName, lastName, address } = req.body;
+      const profile = await Profile.findOne({ where: { user_id: id } });
+
+      if (!profile) {
+        throw {
+          name: 'NotFound',
+          message: 'Profile not found',
+        };
+      }
+
+      const updatedProfile = await profile.update({
+        firstName,
+        lastName,
+        address,
+      });
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Successfully updated the profile',
+        body: updatedProfile,
       });
     } catch (error) {
       next(error);
