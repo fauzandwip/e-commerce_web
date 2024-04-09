@@ -102,7 +102,7 @@ class UserController {
       if (profile) {
         throw {
           name: 'BadRequest',
-          message: 'User has created the profile ',
+          message: 'User has created the profile',
         };
       }
 
