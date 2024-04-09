@@ -26,8 +26,15 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       status: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('pending', 'processing', 'delivered'),
+        allowNull: false,
         defaultValue: 'pending',
+        validate: {
+          isIn: {
+            args: [['pending', 'processing', 'delivered']],
+            msg: 'Invalid order status. Allowed values are: pending, processing, delivered.',
+          },
+        },
       },
     },
     {

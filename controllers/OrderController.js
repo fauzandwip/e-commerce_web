@@ -123,6 +123,29 @@ class OrderController {
       next(error);
     }
   }
+  static async updateOrderStatus(req, res, next) {
+    try {
+      const { id: orderId } = req.params;
+      const { status } = req.body;
+      const order = await Order.findByPk(orderId);
+
+      if (!order) {
+        throw {
+          name: 'NotFound',
+          message: 'Order not found',
+        };
+      }
+
+      await order.update({ status });
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Successfully updated status order',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = OrderController;
