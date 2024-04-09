@@ -10,5 +10,6 @@ router.put('/password', authentication, UserController.resetPassword);
 router.use(authentication);
 router.use('/profiles', require('./profiles'));
 router.use('/products', require('./products'));
+router.use('/orders', require('./orders'));
 
 module.exports = router;
