@@ -43,6 +43,13 @@ class ProductController {
       const { id: productId } = req.params;
       const product = await Product.findByPk(productId);
 
+      if (!product) {
+        throw {
+          name: 'NotFound',
+          message: 'Product not found',
+        };
+      }
+
       res.status(200).json({
         status: 'success',
         message: 'Successfully get product',
